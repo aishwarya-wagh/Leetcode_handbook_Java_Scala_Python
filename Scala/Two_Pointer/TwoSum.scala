@@ -1,6 +1,7 @@
 import scala.collection.mutable
+import scala.util.control.Breaks._
 
-object Solution {
+object Solution extends App {
   def twoSum(nums: Array[Int], target: Int): Array[Int] = {
     val map = mutable.Map[Int, Int]()
 
@@ -15,11 +16,10 @@ object Solution {
     throw new IllegalArgumentException("No two sum solution")
   }
 
-  def main(args: Array[String]): Unit = {
-    val nums = Array(2, 7, 11, 15)
-    val target = 9
-    val result = twoSum(nums, target)
-    println("Scala solution")
-    println(result.mkString("[", ", ", "]"))
-  }
+  // Example usage
+  val nums = Array(2, 7, 11, 15)
+  val target = 9
+  val result = twoSum(nums, target)
+  println("Scala solution")
+  println(result.mkString("[", ", ", "]"))
 }
