@@ -18,7 +18,7 @@ This document provides a comparison of common programming constructs and data st
 - [HashMap, Map, and Dictionary](#hashmap-map-and-dictionary)
 - [Stack and Queue](#stack-and-queue)
 - [Set](#set)
-- [Example Problem: Two Sum](#example-problem-two-sum)
+- [Patterns included in this repository](#Patterns-included-in-this-repository)
 
 ## Variables and Data Types
 
@@ -97,11 +97,6 @@ This document provides a comparison of common programming constructs and data st
 
 
 ## Patterns included in this repository
-
-
-
-
-
 
 1. Two Pointers
 2. Sliding Window
