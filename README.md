@@ -18,7 +18,9 @@ This document provides a comparison of common programming constructs and data st
 - [HashMap, Map, and Dictionary](#hashmap-map-and-dictionary)
 - [Stack and Queue](#stack-and-queue)
 - [Set](#set)
-- [Patterns included in this repository](#Patterns-included-in-this-repository)
+- [PySpark](#pyspark)
+- [Scala and Spark](#scala-spark)
+- [Patterns included in this repository](#patterns-included-in-this-repository)
 
 ## Variables and Data Types
 
@@ -29,6 +31,7 @@ This document provides a comparison of common programming constructs and data st
 | String            | `String s = "hello";`                     | `val s: String = "hello"`     | `s = "hello"`    |
 | Boolean           | `boolean flag = true;`                    | `val flag: Boolean = true`    | `flag = True`    |
 
+
 ## Control Structures
 
 | Concept            | Java                                                               | Scala                                                               | Python                     |
@@ -38,12 +41,14 @@ This document provides a comparison of common programming constructs and data st
 | While loop         | `while (condition) { ... }`                                        | `while (condition) { ... }`                                         | `while condition:\n    ...`          |
 | Switch/Match       | `switch (variable) { case 1: ...; break; ... }`                    | `variable match { case 1 => ... case 2 => ... }`                    | `if variable == 1:\n    ...\nelif variable == 2:\n    ...\nelse:\n    ...` |
 
+
 ## Functions
 
 | Concept             | Java                                                   | Scala                                          | Python                    |
 |---------------------|--------------------------------------------------------|-----------------------------------------------|---------------------------|
 | Function Definition | `public int add(int a, int b) { return a + b; }`       | `def add(a: Int, b: Int): Int = a + b`        | `def add(a, b):\n    return a + b` |
 | Function Call       | `int result = add(5, 3);`                              | `val result = add(5, 3)`                      | `result = add(5, 3)`              |
+
 
 ## Arrays and Lists
 
@@ -53,6 +58,7 @@ This document provides a comparison of common programming constructs and data st
 | List Definition     | `List<Integer> list = new ArrayList<>();`              | `val list = List(1, 2, 3)`                    | `list = [1, 2, 3]`        |
 | Add Element         | `list.add(1);`                                         | `list :+= 1`                                  | `list.append(1)`          |
 | Access Element      | `int x = arr[0];`                                      | `val x = arr(0)`                              | `x = arr[0]`              |
+
 
 ## String Operations
 
@@ -64,6 +70,7 @@ This document provides a comparison of common programming constructs and data st
 | String Split       | `String[] parts = s.split(" ");`    | `val parts = s.split(" ")`         | `parts = s.split(" ")`      |
 | String Join        | `String joined = String.join(",", list);` | `val joined = list.mkString(",")`    | `joined = ",".join(list)`   |
 
+
 ## HashMap, Map, and Dictionary
 
 | Concept             | Java                                                   | Scala                                          | Python                    |
@@ -73,6 +80,7 @@ This document provides a comparison of common programming constructs and data st
 | Get Value           | `int value = map.get("key");`                          | `val value = map("key")`                      | `value = map.get("key")`  |
 | Contains Key        | `boolean containsKey = map.containsKey("key");`        | `val containsKey = map.contains("key")`       | `contains_key = "key" in map` |
 | Iterate Entries     | `for (Map.Entry<String, Integer> entry : map.entrySet()) { String key = entry.getKey(); int value = entry.getValue(); }` | `for ((key, value) <- map) { ... }`  | `for key, value in map.items():\n    ...` |
+
 
 ## Stack and Queue
 
@@ -85,6 +93,7 @@ This document provides a comparison of common programming constructs and data st
 | Enqueue             | `queue.add(1);`                                        | `queue.enqueue(1)`                             | `queue.append(1)`          |
 | Dequeue             | `int front = queue.poll();`                            | `val front = queue.dequeue()`                  | `front = queue.popleft()`  |
 
+
 ## Set
 
 | Concept             | Java                                                   | Scala                                          | Python                    |
@@ -94,6 +103,62 @@ This document provides a comparison of common programming constructs and data st
 | Contains Element    | `boolean contains = set.contains(1);`                  | `val contains = set.contains(1)`               | `contains = 1 in set`     |
 | Remove Element      | `set.remove(1);`                                       | `set.remove(1)`                                | `set.remove(1)`           |
 
+
+
+## PySpark
+
+In PySpark, there isn't a separate `Dataset` API like there is in Scala. In PySpark, the primary abstraction for working with structured and semi-structured data is the `DataFrame`, which is analogous to the `Dataset` in Scala. 
+
+#### Imports and Initialization
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("Example").getOrCreate()
+
+data = [("John", 28), ("Anna", 23), ("Mike", 35)]
+columns = ["Name", "Age"]
+
+df = spark.createDataFrame(data, columns)
+```
+
+#### Comparison Table
+| Operation                  | SQL                                                                 | DataFrame                                                                                  |
+|----------------------------|---------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| Select                     | `spark.sql("SELECT Name, Age FROM table_name")`                     | `df.select("Name", "Age")`                                                                 |
+| Filter                     | `spark.sql("SELECT * FROM table_name WHERE Age > 30")`              | `df.filter(df.Age > 30)`                                                                   |
+| Group By                   | `spark.sql("SELECT Name, COUNT(*) FROM table_name GROUP BY Name")`  | `df.groupBy("Name").count()`                                                               |
+| Aggregation                | `spark.sql("SELECT AVG(Age) FROM table_name")`                      | `df.agg({"Age": "avg"})`                                                                   |
+| Join                       | `spark.sql("SELECT * FROM df1 JOIN df2 ON df1.id = df2.id")`        | `df1.join(df2, df1.id == df2.id)`                                                          |
+| Creating Temporary View    | `df.createOrReplaceTempView("table_name")`                          | `df.createOrReplaceTempView("table_name")`                                                 |
+| Convert to Pandas DataFrame| Not applicable                                                      | `df.toPandas()`                                                                            |
+
+
+
+## Scala Spark
+
+#### Imports and Initialization
+```scala
+import org.apache.spark.sql.{SparkSession, Row}
+import spark.implicits._
+
+val spark = SparkSession.builder.appName("Example").getOrCreate()
+
+val data = Seq(("John", 28), ("Anna", 23), ("Mike", 35))
+val df = data.toDF("Name", "Age")
+```
+
+#### Comparison Table
+| Operation                  | SQL                                                                 | DataFrame                                                                                  | Dataset                                                                                                  |
+|----------------------------|---------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| Select                     | `spark.sql("SELECT Name, Age FROM table_name")`                     | `df.select("Name", "Age")`                                                                 | `df.select($"Name", $"Age")`                                                                             |
+| Filter                     | `spark.sql("SELECT * FROM table_name WHERE Age > 30")`              | `df.filter($"Age" > 30)`                                                                   | `df.filter($"Age" > 30).as[Row]`                                                                          |
+| Group By                   | `spark.sql("SELECT Name, COUNT(*) FROM table_name GROUP BY Name")`  | `df.groupBy("Name").count()`                                                               | `df.groupBy("Name").count().as[Row]`                                                                      |
+| Aggregation                | `spark.sql("SELECT AVG(Age) FROM table_name")`                      | `df.agg(Map("Age" -> "avg"))`                                                              | `df.agg(Map("Age" -> "avg")).as[Row]`                                                                     |
+| Join                       | `spark.sql("SELECT * FROM df1 JOIN df2 ON df1.id = df2.id")`        | `df1.join(df2, $"id" === $"id")`                                                           | `df1.join(df2, $"id" === $"id").as[Row]`                                                                  |
+| Creating Temporary View    | `df.createOrReplaceTempView("table_name")`                          | `df.createOrReplaceTempView("table_name")`                                                 | `df.createOrReplaceTempView("table_name")`                                                               |
+| Convert to Scala Collection| Not applicable                                                      | `df.collect()`                                                                            | Not applicable                                                                                           |
+
+In PySpark, operations are primarily done using `DataFrame`, while in Scala, you have both `DataFrame` and `Dataset` APIs available.
 
 
 ## Patterns included in this repository
